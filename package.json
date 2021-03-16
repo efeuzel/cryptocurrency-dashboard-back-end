@@ -1,0 +1,17 @@
+{
+  "name": "crypto-viewer-backend",
+  "version": "1.0.0",
+  "description": "Server-side application to view cryptocurrency prices and analysis results",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "^8.5.1",
+    "sequelize": "^6.5.1",
+    "websocket": "^1.0.33"
+  }
+}
