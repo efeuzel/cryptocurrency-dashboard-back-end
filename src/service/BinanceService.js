@@ -1,4 +1,5 @@
 import Client from "websocket";
+import wsServer from "../api/WebsocketServer.js";
 
 export default class BinanceService {
   constructor(websocketURL, tickerHandler) {
@@ -40,7 +41,7 @@ export default class BinanceService {
 
   messageHandler(message) {
     if (message.type === "utf8") {
-      console.log("Received: '" + message.utf8Data + "'");
+      //console.log("Received: '" + message.utf8Data + "'");
       const parsedMessage = JSON.parse(message.utf8Data);
       //Ticker messages
       this.tickerHandler.handleTicker(
@@ -51,6 +52,13 @@ export default class BinanceService {
         parsedMessage.a,
         parsedMessage.A
       );
+      if (wsServer.connections[0])
+        wsServer.connections[0].sendUTF(
+          JSON.stringify({
+            name: "Binance_" + parsedMessage.s,
+            bid: parsedMessage.b,
+          })
+        );
     }
   }
 

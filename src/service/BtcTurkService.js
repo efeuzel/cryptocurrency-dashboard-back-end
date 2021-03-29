@@ -1,4 +1,5 @@
 import Client from "websocket";
+import wsServer from "../api/WebsocketServer.js";
 
 export default class BtcTurkService {
   constructor(websocketURL, tickerHandler) {
@@ -40,7 +41,7 @@ export default class BtcTurkService {
 
   messageHandler(message) {
     if (message.type === "utf8") {
-      console.log("Received: '" + message.utf8Data + "'");
+      //console.log("Received: '" + message.utf8Data + "'");
       const parsedMessage = JSON.parse(message.utf8Data);
       if (parsedMessage[0] === 431) {
         //Ticker messages
@@ -52,6 +53,14 @@ export default class BtcTurkService {
           parsedMessage[1].AO[0].P,
           parsedMessage[1].AO[0].A
         );
+        //send to front end
+        if (wsServer.connections[0])
+          wsServer.connections[0].sendUTF(
+            JSON.stringify({
+              name: "BtcTurk_" + parsedMessage[1].PS,
+              bid: parsedMessage[1].BO[0].P,
+            })
+          );
       }
     }
   }
